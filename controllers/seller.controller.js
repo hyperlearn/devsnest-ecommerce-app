@@ -4,6 +4,7 @@ const prisma = new PrismaClient()
 
 const createSeller = async (req, res) => {
   console.log("Initiating create seller")
+  console.log(req.body);
   try {
     const { name, email, gstNumber, phoneNumber } = req.body;
     await prisma.seller.create({
@@ -19,6 +20,13 @@ const createSeller = async (req, res) => {
 }
 const getSellers =  async (req, res) => {
   try {
+    if (req.query.search) {
+      console.log(req.query);
+      console.log('***');
+      console.log(req.query.a.b.c);
+      // add search condition
+    }
+
     const resp = await prisma.seller.findMany({})
     res.status(200).json({ msg: "Success", data: resp});
   } catch (err) {
