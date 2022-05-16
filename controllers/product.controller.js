@@ -36,8 +36,34 @@ const createProduct = async (req, res) => {
   }
 }
 const getProducts =  async (req, res) => {
+  const { limit = 10, offset = 0, sortBy, 
+  sortOrder, search} = req.query;
+  console.log(`limit: ${limit} & offset: ${offset}`);
   try {
-    const resp = await prisma.product.findMany({})
+    // const resp = await prisma.product.findMany({
+    //   skip: parseInt(offset),
+    //   take: parseInt(limit),
+    // }
+    const query = {
+      skip: parseInt(offset),
+      take: parseInt(limit),
+    }
+
+    if (sortBy && sortOrder) {
+      query['orderBy'] = {
+        [sortBy]: sortOrder,
+      }
+    }
+    if (search) {
+      query['where'] = {
+        description: {
+          search: search
+        }
+      }
+    }
+    const resp = await prisma.product.findMany(query);
+
+
     res.status(200).json({ msg: "Success", data: resp});
   } catch (err) {
     console.log(err);
@@ -48,3 +74,11 @@ const getProducts =  async (req, res) => {
 module.exports =  {
   createProduct, getProducts
 };
+
+// sql injection 
+
+// const query = `select * from products
+// limit ${limit}
+// offset ${offset}
+// order by ${sortBy} ${sortOrder}
+// `
