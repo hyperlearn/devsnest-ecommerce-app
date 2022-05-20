@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const config = {
   postgresUrl: process.env["DATABASE_URL"] || 'postgres://postgres:password@localhost:5432/mydb',
   twilio: {
