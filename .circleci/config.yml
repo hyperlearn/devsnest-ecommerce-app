@@ -24,4 +24,4 @@ jobs: # a collection of steps
                 - "2c:18:35:24:5d:a5:96:8f:e9:c8:b4:5c:8f:cc:21:94"
       - deploy:
           name: deployment
-          command: ssh -o "StrictHostKeyChecking no" root@68.183.90.186 "cd ~ && rm -rf new-ecommerce && git clone https://github.com/Sagar2177/Node-App-Deployment-with-Circle-CI.git new-ecommerce && cd new-ecommerce && sh deployment.sh "
+          command: ssh -o "StrictHostKeyChecking no" root@68.183.90.186 "cd ~ && rm -rf new-ecommerce && git clone https://github.com/Sagar2177/devsnest-ecommerce-app/tree/feature/auth.git new-ecommerce && cd new-ecommerce && sh deployment.sh "
