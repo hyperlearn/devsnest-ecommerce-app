@@ -1,7 +1,22 @@
-const { createUser } = require('../services/user.service');
+const { createUser, validateUsernamePassword } = require('../services/user.service');
 
-const login = () => {
+const login =async (req, res) => {
+  const { email, password } = req.body
 
+  if (!(email && password)) {
+    res.status(400).json({ msg: "Invalid username/password"});
+  }
+  try {
+    const {resp, token } = await validateUsernamePassword(email, password);
+    if (resp) {
+      res.status(200).json({ msg: 'Login Successful', token });
+    } else {
+      res.status(401).json({ msg: 'Access Denied'});
+    }
+  } catch (err) {
+    console.log(err.stack)
+    res.status(500).json({ msg: 'Something failed'});
+  }
 }
 
 const signUp = async (req, res) => {
@@ -22,9 +37,9 @@ const signUp = async (req, res) => {
   }
 
   try {
-    await createUser({name, email, password,
+    const token = await createUser({name, email, password,
     phoneNumber, dob});
-    res.status(201).json({ msg: "Successfully Signed Up"});
+    res.status(201).json({ msg: "Successfully Signed Up", token });
   } catch (err) {
     console.log(err.stack);
     res.status(500).json({ msg: "Something Failed!"});
