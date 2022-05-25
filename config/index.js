@@ -4,7 +4,8 @@ const config = {
     apiSID: process.env["TWILIO_SID"] || "",
     apiToken: process.env["TWILIO_TOKEN"] || "",
     from: process.env["TWILIO_FROM"] || ""
-  }
+  },
+  authSecret: process.env["AUTH_SECRET"] || 'secret',
 }
 
 module.exports = config;
