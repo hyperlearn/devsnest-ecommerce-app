@@ -9,6 +9,6 @@ const config = {
   }
 }
 
-//test
+//tes
 
 module.exports = config;
