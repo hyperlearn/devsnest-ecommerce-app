@@ -9,6 +9,6 @@ const config = {
   }
 }
 
-//tes
+//tet
 
 module.exports = config;
