@@ -4,7 +4,9 @@ const prisma = new PrismaClient()
 
 const createProduct = async (req, res) => {
   const { sellerId } = req.params;
-  console.log("Initiating create seller")
+  console.log("Initiating create seller");
+
+  console.log('The files',req.files);
   try {
     const { name, price, description, productImages = [], 
     discountPrice, isDiscounted, category, inStock
@@ -17,8 +19,9 @@ const createProduct = async (req, res) => {
     , data: {
       products: {create: [
         {
-          name, price, description, productImages,
-          discountPrice, isDiscounted, category, inStock,
+          name, price: parseInt(price), description, productImages,
+          discountPrice: parseInt(discountPrice), 
+          isDiscounted: isDiscounted === 'true', category, inStock: inStock === 'true',
         }
       ]
     }}}
