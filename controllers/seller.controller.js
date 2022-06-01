@@ -1,10 +1,10 @@
 const { PrismaClient } = require('@prisma/client')
-
+const { logger } = require('../logger');
 const prisma = new PrismaClient()
 
 const createSeller = async (req, res) => {
-  console.log("Initiating create seller")
-  console.log(req.body);
+  logger.info("Initiating create seller")
+  logger.info(req.body);
   try {
     const { name, email, gstNumber, phoneNumber } = req.body;
     await prisma.seller.create({
@@ -14,7 +14,7 @@ const createSeller = async (req, res) => {
     });
     res.status(200).json({ msg: "Successfully Added seller!"});
   } catch (err) {
-    console.log(err);
+    logger.error(err);
     res.status(400).json({ msg: "Bad request"});
   }
 }
