@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch"]
 }
 
@@ -12,45 +12,60 @@ datasource db {
 }
 
 model Seller {
-  id Int @id @default(autoincrement())
-  name String @db.VarChar(30)
-  email String @unique
-  gstNumber String?
-  phoneNumber String @db.VarChar(10)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  products Product[]
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(30)
+  email       String    @unique
+  gstNumber   String?
+  phoneNumber String    @db.VarChar(10)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
 }
 
 model Product {
-  id  Int @id @default(autoincrement())
-  name  String @db.VarChar(255)
-  price  Int
-  description String
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(255)
+  price         Int
+  description   String
   productImages String[]
   discountPrice Int
-  isDiscounted Boolean @default(false)
-  category String
-  inStock  Boolean @default(true)
-  seller  Seller @relation(fields: [sellerId], references: [id])
-  sellerId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  isDiscounted  Boolean  @default(false)
+  category      String
+  inStock       Boolean  @default(true)
+  seller        Seller   @relation(fields: [sellerId], references: [id])
+  sellerId      Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  Order         Order?   @relation(fields: [orderId], references: [id])
+  orderId       Int?
 }
+
 enum Role {
   ADMIN
-  USER 
+  USER
   SELLER
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String @db.VarChar(30)
-  email String @unique
-  password String
-  phoneNumber String @db.VarChar(10)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  dob DateTime?
-  role Role
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(30)
+  email       String    @unique
+  password    String
+  phoneNumber String    @db.VarChar(10)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  dob         DateTime?
+  role        Role
+  Order       Order[]
+}
+
+model Order {
+  id         Int       @id @default(autoincrement())
+  productIds Int[]
+  user       User      @relation(fields: [userId], references: [id])
+  total      Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  userId     Int
+  Product    Product[]
 }

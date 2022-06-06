@@ -1,8 +1,9 @@
 const express = require('express')
 const { createSeller, getSellers } = require('./controllers/seller.controller')
 const { createProduct, getProducts } = require('./controllers/product.controller');
-const { createOtp } = require('./controllers/otp.controller')
+const { createOtp, validateOtp } = require('./controllers/otp.controller')
 const { signUp, login } = require('./controllers/user.controller');
+const { createOrder } = require('./controllers/order.controller');
 const { authenticate } = require('./middlewares/auth');
 const multer = require('multer');
 
@@ -45,9 +46,13 @@ app.post('/seller/:sellerId/product', uploads.array('productImages', 6), createP
 app.get('/products', getProducts);
 
 app.post('/otp', createOtp);
+app.post('/validateotp', validateOtp);
+
 
 app.post('/auth/signup', signUp);
 app.post('/auth/login', login);
+
+app.post('/order', createOrder);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
