@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client')
+const rzp  = require('../services/razorpay.service');
 
 const prisma = new PrismaClient()
 
@@ -30,7 +31,20 @@ const createOrder = async (req, res) => {
     }
   });
   console.log(order);
-  res.status(200).json({ status: 'Success', 
+  let rzpOrder;
+  try {
+    rzpOrder = await rzp.orders.create({
+      amount: total,// Rs 100, 10000
+      currency: 'INR',
+      receipt: order.id,
+    })
+  } catch (error) {
+    console.log(error);
+  }
+
+  console.log(rzpOrder, 'rzp')
+  const { id: rzpId, amount, receipt } = rzpOrder;
+  res.status(200).json({ status: 'Success', rzpId, amount, receipt,
   msg: 'Order Successfully created'});
 };
 
