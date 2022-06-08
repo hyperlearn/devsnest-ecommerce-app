@@ -1,4 +1,5 @@
 const { createUser, validateUsernamePassword } = require('../services/user.service');
+const { sendEmail } = require('../services/email.service');
 
 const login =async (req, res) => {
   const { email, password } = req.body
@@ -39,6 +40,12 @@ const signUp = async (req, res) => {
   try {
     const token = await createUser({name, email, password,
     phoneNumber, dob});
+    await sendEmail({
+      to: email,
+      subject: "Welcome to devsnest ecommerce-app",
+      text: "welcome",
+      html: '<h1> Welcome! </h1>'
+    })
     res.status(201).json({ msg: "Successfully Signed Up", token });
   } catch (err) {
     console.log(err.stack);
