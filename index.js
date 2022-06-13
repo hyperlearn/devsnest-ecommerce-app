@@ -2,7 +2,7 @@ const express = require('express')
 const { createSeller, getSellers } = require('./controllers/seller.controller')
 const { createProduct, getProducts } = require('./controllers/product.controller');
 const { createOtp, validateOtp } = require('./controllers/otp.controller')
-const { signUp, login } = require('./controllers/user.controller');
+const { signUp, login, forgotPassword, resetPassword } = require('./controllers/user.controller');
 const { createOrder } = require('./controllers/order.controller');
 const { authenticate } = require('./middlewares/auth');
 const multer = require('multer');
@@ -51,6 +51,9 @@ app.post('/validateotp', validateOtp);
 
 app.post('/auth/signup', signUp);
 app.post('/auth/login', login);
+app.post('/auth/forgotPassword', forgotPassword);
+app.post('/auth/resetPassword', authenticate, resetPassword);
+
 
 app.post('/order', createOrder);
 

@@ -1,4 +1,4 @@
-const { createUser, validateUsernamePassword } = require('../services/user.service');
+const { createUser, validateUsernamePassword, getUserByEmail, generateToken, updateUserPassword } = require('../services/user.service');
 const { sendEmail } = require('../services/email.service');
 
 const login =async (req, res) => {
@@ -53,7 +53,49 @@ const signUp = async (req, res) => {
   }
 };
 
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  try{
+  if (!email) {
+    res.status(400).json({ msg: 'Email is needed'});
+  }
+
+  const user = await getUserByEmail(email);
+  console.log('&&&&&&&&', user);
+  if (!user) {
+    res.status(401).json({ msg: 'Invalid Email'});
+  }
+
+  const token = await generateToken(user.name, user.email, user.role, '10m');
+  res.status(200).json({ token });
+} catch (err) {
+  console.log(err.stack);
+  res.status(500).json({ msg: "Something Failed!"});
+}
+}
+
+const resetPassword = async (req, res) => {
+  const { password, confirmPassword } = req.body;
+  const { email } = req.userDetails;
+  console.log(req.userDetails);
+  try{
+  if (password!==confirmPassword) {
+    res.status(400).json({ msg: "Passwords don't match"});
+  }
+
+  await updateUserPassword(email, password);
+  res.status(200).json({ msg: 'Success'});
+} catch (err) {
+  console.log(err.stack);
+  res.status(500).json({ msg: "Something Failed!"});
+}
+
+}
+
 module.exports = {
   login,
-  signUp
+  signUp,
+  forgotPassword,
+  resetPassword
 };

@@ -20,7 +20,7 @@ let transporter;
 
 const sendEmail = async ({ to, subject, text, html }) => {
   const info = await transporter.sendMail({
-    from: "admin@devsnest.com",
+    from: "no-reply@devsnest.com",
     to, subject, html, text
   });
 
