@@ -5,6 +5,7 @@ const { createOtp, validateOtp } = require('./controllers/otp.controller')
 const { signUp, login, forgotPassword, resetPassword } = require('./controllers/user.controller');
 const { createOrder } = require('./controllers/order.controller');
 const { authenticate } = require('./middlewares/auth');
+const jobs = require('./jobs');
 const multer = require('multer');
 
 // const uploads = multer({ dest: 'uploads/'});
@@ -57,6 +58,7 @@ app.post('/auth/resetPassword', authenticate, resetPassword);
 
 app.post('/order', createOrder);
 
+jobs()
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })

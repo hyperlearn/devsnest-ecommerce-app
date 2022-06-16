@@ -1,5 +1,7 @@
 const { createUser, validateUsernamePassword, getUserByEmail, generateToken, updateUserPassword } = require('../services/user.service');
+const { produceMessage } = require('../services/sqs.service');
 const { sendEmail } = require('../services/email.service');
+
 
 const login =async (req, res) => {
   const { email, password } = req.body
@@ -25,7 +27,7 @@ const signUp = async (req, res) => {
     name, email, password, confirmPassword, phoneNumber,
     dob
   } = req.body;
-
+  const start = Date.now()
   // name, email, password, confirmPassword
   // and phone number are present
   if (!(name && email && password && confirmPassword
@@ -40,13 +42,14 @@ const signUp = async (req, res) => {
   try {
     const token = await createUser({name, email, password,
     phoneNumber, dob});
-    await sendEmail({
-      to: email,
-      subject: "Welcome to devsnest ecommerce-app",
-      text: "welcome",
-      html: '<h1> Welcome! </h1>'
-    })
-    res.status(201).json({ msg: "Successfully Signed Up", token });
+    // await sendEmail({
+    //   to: email,
+    //   subject: "Welcome to devsnest ecommerce-app",
+    //   text: "welcome",
+    //   html: '<h1> Welcome! </h1>'
+    // })
+    produceMessage({ event: 'EMAIL', type: 'WELCOME_EMAIL', data: { email }});
+    res.status(201).json({ msg: "Successfully Signed Up", token, latency: Date.now() - start });
   } catch (err) {
     console.log(err.stack);
     res.status(500).json({ msg: "Something Failed!"});

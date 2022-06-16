@@ -34,7 +34,6 @@ const getUserByEmail = async(email) => {
 }
 
 const updateUserPassword = async (email, password) => {
-  console.log('&&&&&&&&&&', email);
   await prisma.user.update({
     where: { email },
     data: {
