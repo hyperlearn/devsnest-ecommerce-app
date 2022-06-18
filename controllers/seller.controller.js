@@ -20,7 +20,7 @@ const createSeller = async (req, res) => {
 }
 const getSellers =  async (req, res) => {
   try {
-    if (req.query.search) {
+    if (req.query && req.query.search) {
       console.log(req.query);
       console.log('***');
       console.log(req.query.a.b.c);
